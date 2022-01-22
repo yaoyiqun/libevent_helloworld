@@ -5,7 +5,6 @@
 #include <event2/listener.h>
 
 #define SPORT 5001
-event_config *conf;
 void listen_cb(evconnlistener *base,
                int cb, sockaddr *ptr, int flags, void *backlog)
 {
@@ -20,6 +19,7 @@ int main()
 #elif __linux__
     std::cout << "Hello, linux World!" << std::endl;
     if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
+        return 1;
 #endif
     //初始化配置libevent上下文
     //event_base * base = event_base_new();
@@ -34,7 +34,7 @@ int main()
         std::cout << methods[i] << std::endl;
     }
     event_base *base = event_base_new_with_config(conf);
-    //event_config_free(conf);
+    event_config_free(conf);
     if (base != nullptr)
     {
         std::cout << "event_base_new success!" << std::endl;
