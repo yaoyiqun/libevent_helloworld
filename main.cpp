@@ -19,11 +19,25 @@ int main() {
     std::cout << "Hello, linux World!" << std::endl;
     if(signal(SIGPIPE,SIG_IGN)==SIG_ERR)
 #endif
-    std::cout << "Hello, World!" << std::endl;
-    event_base * base = event_base_new();
+    //初始化配置libevent上下文
+    //event_base * base = event_base_new();
+
+    //根据配置项配置libevnet上下文
+    event_config *conf = event_config_new();
+    //显示支持的模式
+    auto methods =  event_get_supported_methods();
+    std::cout<<"supported_methods:"<<std::endl;
+    for(int i =0;methods[i]!= nullptr;i++)
+    {
+        std::cout<<methods[i]<<std::endl;
+    }
+    event_base * base = event_base_new_with_config(conf);
+    event_config_free(conf);
     if(base!= nullptr)
     {
         std::cout<<"event_base_new success!"<<std::endl;
+    } else{
+        std::cerr<<"event_base创建失败!"<<std::endl;
     }
     //监听端口
     //socket,bind,listen绑定时间
